@@ -2,7 +2,7 @@ package projecte3.projecte_3.mapper;
 
 import org.springframework.stereotype.Component;
 import projecte3.projecte_3.dto.AcademicProfileDTO;
-import projecte3.projecte_3.dto.UserRequestDTO;
+import projecte3.projecte_3.dto.USerRequestDTO;
 import projecte3.projecte_3.dto.UserResponseDTO;
 import projecte3.projecte_3.model.AcademicProfile;
 import projecte3.projecte_3.model.User;
@@ -39,7 +39,7 @@ public class UserMapper {
         return dto;
     }
 
-    public User toEntity(UserRequestDTO request) {
+    public User toEntity(USerRequestDTO request) {
         if (request == null) {
             return null;
         }
