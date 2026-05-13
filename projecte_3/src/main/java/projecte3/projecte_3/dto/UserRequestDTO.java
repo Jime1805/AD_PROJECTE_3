@@ -2,7 +2,7 @@ package projecte3.projecte_3.dto;
 
 import projecte3.projecte_3.model.Role;
 
-public class USerRequestDTO {
+public class UserRequestDTO {
     private String firstName;
     private String lastName;
     private String email;
@@ -13,7 +13,7 @@ public class USerRequestDTO {
     private String course;
     private String observations;
 
-    public USerRequestDTO() {
+    public UserRequestDTO() {
     }
 
     public String getFirstName() {
