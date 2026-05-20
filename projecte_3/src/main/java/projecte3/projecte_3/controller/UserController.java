@@ -53,7 +53,6 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> create(@RequestBody UserRequestDTO request) {
         UserResponseDTO created = userService.create(request);
         if (created == null) {
-            // Email ja existent → 409 Conflict
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
