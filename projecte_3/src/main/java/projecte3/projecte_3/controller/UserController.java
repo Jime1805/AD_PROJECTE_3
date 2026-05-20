@@ -1,7 +1,10 @@
 package projecte3.projecte_3.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import projecte3.projecte_3.dto.UserRequestDTO;
 import projecte3.projecte_3.dto.UserResponseDTO;
 import projecte3.projecte_3.model.Role;
 import projecte3.projecte_3.service.UserService;
@@ -44,5 +47,34 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping
+    public ResponseEntity<UserResponseDTO> create(@RequestBody UserRequestDTO request) {
+        UserResponseDTO created = userService.create(request);
+        if (created == null) {
+            // Email ja existent → 409 Conflict
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> update(@PathVariable String id,
+                                                   @RequestBody UserRequestDTO request) {
+        UserResponseDTO updated = userService.update(id, request);
+        if (updated == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        boolean deleted = userService.delete(id);
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
     }
 }
