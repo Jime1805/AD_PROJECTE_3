@@ -1,6 +1,7 @@
 package projecte3.projecte_3.service;
 
 import org.springframework.stereotype.Service;
+import projecte3.projecte_3.dto.UserRequestDTO;
 import projecte3.projecte_3.dto.UserResponseDTO;
 import projecte3.projecte_3.mapper.UserMapper;
 import projecte3.projecte_3.model.Role;
@@ -42,5 +43,53 @@ public class UserService {
     public UserResponseDTO findByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         return user.map(userMapper::toDto).orElse(null);
+    }
+
+    public UserResponseDTO create(UserRequestDTO request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return null;
+        }
+
+        User user = userMapper.toEntity(request);
+        User saved = userRepository.save(user);
+        return userMapper.toDto(saved);
+    }
+
+    public UserResponseDTO update(String id, UserRequestDTO request) {
+        Optional<User> existing = userRepository.findById(id);
+        if (existing.isEmpty()) {
+            return null;
+        }
+
+        User user = existing.get();
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setUsername(request.getUsername());
+        user.setPassword(request.getPassword());
+        user.setRole(request.getRole());
+
+        if (request.getGrade() != null) {
+            user.setAcademicProfile(
+                new projecte3.projecte_3.model.AcademicProfile(
+                    request.getGrade(),
+                    request.getCourse(),
+                    request.getObservations(),
+                    "ACTIVE"
+                )
+            );
+        }
+
+        User saved = userRepository.save(user);
+        return userMapper.toDto(saved);
+    }
+
+    public boolean delete(String id) {
+        if (!userRepository.existsById(id)) {
+            return false;
+        }
+        userRepository.deleteById(id);
+        return true;
     }
 }
